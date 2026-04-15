@@ -1,21 +1,22 @@
 const express = require('express');
 const router = express.Router();
 
-const usuariosRoutes = require("./routes/usuariosRoutes"); 
-const empresasRoutes = require("./routes/empresasRoutes"); 
-const clientesRoutes = require("./routes/clientesRoutes"); 
-const fretesRoutes = require("./routes/fretesRoutes"); 
-const produtosRoutes = require("./routes/produtosRoutes"); 
-const pedidosRoutes = require("./routes/pedidosRoutes"); 
-const itensPedidoRoutes = require("./routes/itensPedidoRoutes"); 
+/* =========================
+   ROTAS DO SISTEMA NOVO
+========================= */
 
+const usuariosRoutes = require("./routes/usuarios.routes");
+const clientesRoutes = require("./routes/clientes.routes");
+const vestidosRoutes = require("./routes/vestidos.routes");
+const alugueisRoutes = require("./routes/alugueis.routes");
+
+/* =========================
+   MIDDLEWARE DE ROTAS
+========================= */
 
 router.use('/usuarios', usuariosRoutes);
-router.use('/empresas', empresasRoutes);
 router.use('/clientes', clientesRoutes);
-router.use('/fretes', fretesRoutes);
-router.use('/produtos', produtosRoutes);
-router.use('/pedidos', pedidosRoutes);
-router.use('/itensPedido', itensPedidoRoutes);
+router.use('/vestidos', vestidosRoutes);
+router.use('/alugueis', alugueisRoutes);
 
 module.exports = router;

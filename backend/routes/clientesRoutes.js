@@ -2,17 +2,11 @@ const express = require('express');
 const router = express.Router();
 const clientesController = require('../controllers/clientesController');
 
-router.get('/', clientesController.listar);
-router.post('/', clientesController.criar);
-router.put('/:id', clientesController.atualizar);
-router.delete('/:id', clientesController.excluir);
+// 🔹 conforme sua controller
+router.get('/', clientesController.listarClientes);
+router.get('/:id', clientesController.buscarCliente); // se você criou
+router.post('/', clientesController.criarCliente);
+router.put('/:id', clientesController.editarCliente); // se tiver
+router.delete('/:id', clientesController.removerCliente);
 
 module.exports = router;
-
-/*
-roteador.get('/listaCadastros/:TIPOCADASTRO', cadastroController.listaCadastros);
-roteador.get('/listaCadastro/:CADASTRO_ID', cadastroController.listaCadastro);
-roteador.post('/criaCadastro', cadastroController.criarCadastro);
-roteador.put('/editaCadastro/:CADASTRO_ID', cadastroController.editarCadastro);
-roteador.delete('/removeCadastro/:CADASTRO_ID', cadastroController.removeCadastro);
-*/

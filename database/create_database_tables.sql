@@ -1,146 +1,79 @@
-CREATE DATABASE AdminFlow
-go
+CREATE DATABASE ADMINFLOW
+GO
 
 USE ADMINFLOW
 GO
-/* =========================
-   TABELA EMPRESAS
-========================= */
-CREATE TABLE Empresas (
-    IdEmpresa INT IDENTITY(1,1) PRIMARY KEY,
-    Nome VARCHAR(150) NOT NULL,
-    CNPJ VARCHAR(20),
-    Ativo BIT DEFAULT 1,
-    DataCriacao DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
-    DataAtualizacao DATETIME2 NULL
-);
 
 /* =========================
    TABELA USUARIOS
 ========================= */
-CREATE TABLE Usuarios (
-    IdUsuario INT IDENTITY(1,1) PRIMARY KEY,
-    IdEmpresa INT NOT NULL,
-    Nome VARCHAR(150) NOT NULL,
-    Email VARCHAR(150) NOT NULL,
-    SenhaHash VARCHAR(255) NOT NULL,
-    Perfil VARCHAR(50),
-    Ativo BIT DEFAULT 1,
-    DataCriacao DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
-    DataAtualizacao DATETIME2 NULL,
-
-    CONSTRAINT FK_Usuarios_Empresas
-        FOREIGN KEY (IdEmpresa)
-        REFERENCES Empresas(IdEmpresa)
+CREATE TABLE USUARIOS (
+    IDUSUARIO INT IDENTITY(1,1) PRIMARY KEY,
+    NOME VARCHAR(150) NOT NULL,
+    EMAIL VARCHAR(150) NOT NULL,
+    SENHAHASH VARCHAR(255) NOT NULL,
+    DATACRIACAO DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    DATAATUALIZACAO DATETIME2 NULL,
 );
 /* =========================
    TABELA CLIENTES
 ========================= */
-CREATE TABLE Clientes (
-    IdCliente INT IDENTITY(1,1) PRIMARY KEY,
-    IdEmpresa INT NOT NULL,
-    Nome VARCHAR(150) NOT NULL,
-    Documento VARCHAR(30),
-    Email VARCHAR(150),
-    Telefone VARCHAR(30),
-    Cidade VARCHAR(100),
-    Estado VARCHAR(50),
-    DataCriacao DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
-    DataAtualizacao DATETIME2 NULL,
+CREATE TABLE CLIENTES (
+    IDCLIENTE INT IDENTITY(1,1) PRIMARY KEY,
+    NOME VARCHAR(150) NOT NULL,
+    TELEFONE VARCHAR(30),
+    EMAIL VARCHAR(150),
+    DATACRIACAO DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    DATAATUALIZACAO DATETIME2 NULL,
 
-    CONSTRAINT FK_Clientes_Empresas
-        FOREIGN KEY (IdEmpresa)
-        REFERENCES Empresas(IdEmpresa)
 );
-/* =========================
-   TABELA PEDIDOS
-========================= */
-CREATE TABLE Pedidos (
-    IdPedido INT IDENTITY(1,1) PRIMARY KEY,
-    IdEmpresa INT NOT NULL,
-    IdCliente INT NOT NULL,
-    IdUsuario INT NOT NULL,
-    DataPedido DATETIME2 DEFAULT SYSDATETIME(),
-    ValorTotal DECIMAL(18,2) DEFAULT 0,
-    Status VARCHAR(50) DEFAULT 'ABERTO',
-    DataCriacao DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
-    DataAtualizacao DATETIME2 NULL,
-
-    CONSTRAINT FK_Pedidos_Empresas FOREIGN KEY (IdEmpresa) REFERENCES Empresas(IdEmpresa),
-    CONSTRAINT FK_Pedidos_Clientes FOREIGN KEY (IdCliente) REFERENCES Clientes(IdCliente),
-    CONSTRAINT FK_Pedidos_Usuarios FOREIGN KEY (IdUsuario) REFERENCES Usuarios(IdUsuario)
-);
-
-/* =========================
-   TABELA Produtos
-========================= */
-CREATE TABLE Produtos (
-    IdProduto INT IDENTITY(1,1) PRIMARY KEY,
-    IdEmpresa INT NOT NULL,
-    Nome VARCHAR(150) NOT NULL,
-    Descricao VARCHAR(500),
-    Preco DECIMAL(18,2) NOT NULL,
-    Ativo BIT DEFAULT 1,
-    DataCriacao DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
-    DataAtualizacao DATETIME2 NULL,
-
-    CONSTRAINT FK_Produtos_Empresas
-        FOREIGN KEY (IdEmpresa)
-        REFERENCES Empresas(IdEmpresa)
-);
-
-/* =========================
-   TABELA PEDIDOS
-========================= */
-CREATE TABLE Pedidos (
-    IdPedido INT IDENTITY(1,1) PRIMARY KEY,
-    IdEmpresa INT NOT NULL,
-    IdCliente INT NOT NULL,
-    IdUsuario INT NOT NULL,
-    DataPedido DATETIME2 DEFAULT SYSDATETIME(),
-    ValorTotal DECIMAL(18,2) DEFAULT 0,
-    Status VARCHAR(50) DEFAULT 'ABERTO',
-    DataCriacao DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
-    DataAtualizacao DATETIME2 NULL,
-    CONSTRAINT FK_Pedidos_Empresas FOREIGN KEY (IdEmpresa) REFERENCES Empresas(IdEmpresa),
-    CONSTRAINT FK_Pedidos_Clientes FOREIGN KEY (IdCliente) REFERENCES Clientes(IdCliente),
-    CONSTRAINT FK_Pedidos_Usuarios FOREIGN KEY (IdUsuario) REFERENCES Usuarios(IdUsuario)
-);
-/* =========================
-   TABELA ITENS PEDIDO
-========================= */
-CREATE TABLE ItensPedido (
-    IdItemPedido INT IDENTITY(1,1) PRIMARY KEY,
-    IdPedido INT NOT NULL,
-    IdProduto INT NOT NULL,
-    Quantidade INT NOT NULL,
-    ValorUnitario DECIMAL(18,2) NOT NULL,
-    ValorTotal AS (Quantidade * ValorUnitario),
-    DataCriacao DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
-    DataAtualizacao DATETIME2 NULL,
-    CONSTRAINT FK_ItensPedido_Pedidos FOREIGN KEY (IdPedido) REFERENCES Pedidos(IdPedido),
-    CONSTRAINT FK_ItensPedido_Produtos FOREIGN KEY (IdProduto) REFERENCES Produtos(IdProduto)
-);
-
 
 
 /* =========================
-   TABELA FRETES
+   TABELA VESTIDOS
 ========================= */
-
-CREATE TABLE Fretes (
-    IdFrete INT IDENTITY(1,1) PRIMARY KEY,
-    IdPedido INT NOT NULL,
-    Transportadora VARCHAR(150),
-    ValorFrete DECIMAL(18,2),
-    DataEnvio DATETIME2,
-    DataPrevistaEntrega DATETIME2,
-    StatusEntrega VARCHAR(50),
-    DataCriacao DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
-    DataAtualizacao DATETIME2 NULL,
-
-    CONSTRAINT FK_Fretes_Pedidos
-        FOREIGN KEY (IdPedido)
-        REFERENCES Pedidos(IdPedido)
+CREATE TABLE VESTIDOS (
+    IDVESTIDO INT IDENTITY(1,1) PRIMARY KEY,
+    NOME VARCHAR(255) NOT NULL,
+    TAMANHO VARCHAR(10), -- P, M, G
+    COR VARCHAR(50),
+    TEMA VARCHAR(100), -- JUNINA, LUXO, ETC
+    PRECO_ALUGUEL DECIMAL(10,2) NOT NULL,
+    STATUS VARCHAR(50) DEFAULT 'DISPONIVEL', -- DISPONIVEL, ALUGADO, MANUTENCAO
+    IMAGEM_URL TEXT,
+    DATACRIACAO DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    DATAATUALIZACAO DATETIME2 NULL,
 );
 
+/* =========================
+   TABELA VESTIDOS
+========================= */
+
+CREATE TABLE ALUGUEIS (
+    IDALUGUEL INT IDENTITY(1,1) PRIMARY KEY,
+
+    CLIENTE_ID INT NOT NULL,
+    VESTIDO_ID INT NOT NULL,
+
+    DATA_RETIRADA DATE NOT NULL,
+    DATA_DEVOLUCAO DATE NOT NULL,
+
+    VALOR DECIMAL(10,2),
+    MULTA DECIMAL(10,2) DEFAULT 0,
+
+    STATUS VARCHAR(50) DEFAULT 'RESERVADO', 
+    -- RESERVADO, RETIRADO, DEVOLVIDO, ATRASADO
+	
+    DATACRIACAO DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    DATAATUALIZACAO DATETIME2 NULL,
+
+    CONSTRAINT FK_CLIENTE
+        FOREIGN KEY(CLIENTE_ID) 
+        REFERENCES CLIENTES(IDCLIENTE)
+        ON DELETE CASCADE,
+
+    CONSTRAINT FK_VESTIDO
+        FOREIGN KEY(VESTIDO_ID) 
+        REFERENCES VESTIDOS(IDVESTIDO)
+        ON DELETE CASCADE
+);

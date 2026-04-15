@@ -1,133 +1,104 @@
-
-const db = require('../database/index');
+const db = require('../database');
 const bcrypt = require('bcrypt');
 
-  const select ="select * from USUARIO";
+async function criarUsuario(req, res) {
+  try {
+    const { Nome, Email, Senha } = req.body;
 
-  async function criarUsuario(request, response) {
-    try{
-      const { 
-        USUARIOACESSO,
-        EMPRESALOGADA,
-        NOME ,
-        DEPARTAMENTO ,
-        FUNCAO ,
-        SIMBOLO ,
-        SENHA , 
-        PAPELPAREDE } = request.body;
+    const senhaHash = await bcrypt.hash(Senha, 10);
 
-      const salt = await bcrypt.genSalt();
-      const senhaCripto = await bcrypt.hash(SENHA, salt);
-      
-      await db.executar(`
-          insert into USUARIO
-          (USUARIOACESSO,
-          EMPRESALOGADA,
-          NOME, 
-          DEPARTAMENTO,
-          FUNCAO,
-          SIMBOLO,
-          SENHA,
-          PAPELPAREDE) `+
-          `values (
-          '${USUARIOACESSO}',
-          ${EMPRESALOGADA},
-          '${NOME}',
-          ${DEPARTAMENTO==null? null: `'${DEPARTAMENTO}'`},
-          ${FUNCAO==null? null: `'${FUNCAO}'`},
-          ${SIMBOLO==null? null: `'${SIMBOLO}'`},
-          '${senhaCripto}', 
-          ${PAPELPAREDE==null? null: `'${PAPELPAREDE}'`}
-          ) `);
-          return response.json(true); 
-        }catch(e){
-          
-          console.log(e);
-          return response.json("Erro: "+e); 
-        } 
-  }
-   
-  async function listaUsuarios(request, response) {
-    try{
-      const {EMPRESALOGADA}=request.params; 
-      const user = (await db.executar(`${select} where  EMPRESALOGADA=${EMPRESALOGADA}`));
-      return response.json(user[0]==null?false:user);
-    }catch(e){
-      return response.json("Erro: "+e); 
-    } 
-  }
+    const usuario = await db.usuariosModel.create({
+      Nome,
+      Email,
+      SenhaHash: senhaHash
+    });
 
-  async function listaUsuario(request, response) {
-    try{
-      const{USUARIO_ID} = request.params;
-      const user =  await db.executar(`${select} where USUARIO_ID=${USUARIO_ID} `);
-      return response.json(user[0]==null?false:user[0]);
-    }catch(e){
-      return response.json("Erro: "+e); 
-    } 
-  }
-  
+    return res.json(usuario);
 
-  async function autenticarUsuario(request, response) {
-    try{
-      const {USUARIO_ID,USUARIOACESSO, SENHA} = request.body; 
+  } catch (e) {
+    return res.json("Erro: " + e);
+  }
+}
 
-      const user = (await db.executar(`${select} where USUARIO_ID=${USUARIO_ID} `));
-  
-      if(user[0]!=null){ 
-        match = false;
-        bcrypt.compare(SENHA, user[0].SENHA, function(err, result) {
-        if(result==true){ 
-            if(user[0].USUARIOACESSO==USUARIOACESSO){
-              return response.json(user[0]); 
-            }else{ 
-              return response.json(false);}
-          }else{ 
-            return response.json(false);}
-        })
-      }else{ 
-        return response.json(false);
-      };   
-    }catch(e){
-      return response.json("Erro: "+e); 
-    } 
+async function listarUsuarios(req, res) {
+  try {
+    const usuarios = await db.usuariosModel.findAll();
+    return res.json(usuarios);
+  } catch (e) {
+    return res.json("Erro: " + e);
   }
-  
-  async function editarUsuario(request, response){
-    try{
-      const {USUARIO_ID} = request.params; 
-      const {  
-        USUARIOACESSO, 
-        NOME ,
-        DEPARTAMENTO ,
-        FUNCAO ,
-        SIMBOLO, 
-        PAPELPAREDE } = request.body;
+}
 
-      const USUARIO = await db.executar(`
-        UPDATE USUARIO SET 
-        USUARIOACESSO='${USUARIOACESSO}' ,
-        NOME ='${NOME}', 
-        DEPARTAMENTO = ${DEPARTAMENTO==null? null: `'${DEPARTAMENTO}'`},
-        FUNCAO = ${FUNCAO==null? null: `'${FUNCAO}'`},
-        SIMBOLO = ${SIMBOLO==null? null: `'${SIMBOLO}'`},
-        PAPELPAREDE = ${PAPELPAREDE==null? null: `'${PAPELPAREDE}'`}
-        where USUARIO_ID = '${USUARIO_ID}'  
-        returning USUARIO_ID
-      `);
-      return response.json(USUARIO.USUARIO_ID==null?false:true); 
-    }catch(e){
-      return response.json("Erro: "+e); 
-    } 
+async function buscarUsuario(req, res) {
+  try {
+    const { id } = req.params;
+
+    const usuario = await db.usuariosModel.findByPk(id);
+
+    return res.json(usuario || false);
+  } catch (e) {
+    return res.json("Erro: " + e);
   }
-  
-  async function removeUsuario(request,response){
-    try{
-      const {USUARIO_ID}  = request.params;
-      const remove =(await db.executar(`DELETE FROM usuario WHERE USUARIO_ID = ${USUARIO_ID} returning NOME`));
-      return response.json(!remove.NOME?false:true);
-    }catch(e){
-      return response.json("Erro: "+e); 
-    } 
+}
+
+async function autenticarUsuario(req, res) {
+  try {
+    const { Email, Senha } = req.body;
+
+    const usuario = await db.usuariosModel.findOne({
+      where: { Email }
+    });
+
+    if (!usuario) return res.json(false);
+
+    const senhaValida = await bcrypt.compare(Senha, usuario.SenhaHash);
+
+    if (!senhaValida) return res.json(false);
+
+    return res.json(usuario);
+
+  } catch (e) {
+    return res.json("Erro: " + e);
   }
-  module.exports = {criarUsuario,listaUsuarios,listaUsuario,autenticarUsuario,editarUsuario, removeUsuario};
+}
+
+async function editarUsuario(req, res) {
+  try {
+    const { id } = req.params;
+    const { Nome, Email } = req.body;
+
+    const atualizado = await db.usuariosModel.update(
+      { Nome, Email },
+      { where: { IdUsuario: id } }
+    );
+
+    return res.json(atualizado[0] > 0);
+
+  } catch (e) {
+    return res.json("Erro: " + e);
+  }
+}
+
+async function removerUsuario(req, res) {
+  try {
+    const { id } = req.params;
+
+    const deletado = await db.usuariosModel.destroy({
+      where: { IdUsuario: id }
+    });
+
+    return res.json(deletado > 0);
+
+  } catch (e) {
+    return res.json("Erro: " + e);
+  }
+}
+
+module.exports = {
+  criarUsuario,
+  listarUsuarios,
+  buscarUsuario,
+  autenticarUsuario,
+  editarUsuario,
+  removerUsuario
+};
