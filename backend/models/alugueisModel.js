@@ -25,8 +25,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Alugueis.associate = models => {
-    Alugueis.belongsTo(models.Clientes, { foreignKey: 'Cliente_Id' });
-    Alugueis.belongsTo(models.Vestidos, { foreignKey: 'Vestido_Id' });
+    Alugueis.belongsTo(models.clientesModel, { foreignKey: 'Cliente_Id' });
+    Alugueis.belongsTo(models.vestidosModel, { foreignKey: 'Vestido_Id' });
   };
 
   return Alugueis;

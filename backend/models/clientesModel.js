@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Clientes.associate = models => {
-    Clientes.hasMany(models.Alugueis, { foreignKey: 'Cliente_Id' });
+    Clientes.hasMany(models.alugueisModel, { foreignKey: 'Cliente_Id' });
   };
 
   return Clientes;

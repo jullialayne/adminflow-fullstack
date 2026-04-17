@@ -58,4 +58,4 @@ async function editarCliente(req, res) {
   return res.json(atualizado[0] > 0);
 }
 
-module.exports = { buscarCliente, criarCliente, listarClientes, removerCliente };
+module.exports = { buscarCliente, criarCliente, listarClientes, removerCliente, editarCliente };
