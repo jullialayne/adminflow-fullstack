@@ -1,18 +1,24 @@
 const db = require('../database');
 
 async function criarCliente(req, res) {
+
   try {
-    const { Nome, Telefone, Email } = req.body;
 
     const cliente = await db.clientesModel.create({
-      Nome,
-      Telefone,
-      Email
+      ...req.body,
+      DATACRIACAO: new Date(),
+      DATAATUALIZACAO: new Date()
     });
 
-    return res.json(cliente); // retorna o objeto criado
+    return res.json(cliente);
+
   } catch (e) {
-    return res.json("Erro: " + e);
+
+    console.error(e);
+
+    return res.status(500).json({
+      erro: e.message
+    });
   }
 }
 
@@ -20,9 +26,14 @@ async function listarClientes(req, res) {
   try {
     const clientes = await db.clientesModel.findAll();
     return res.json(clientes);
-  } catch (e) {
-    return res.json("Erro: " + e);
-  }
+  } catch (error) {
+  console.error(error);
+
+  res.status(500).json({
+    erro: error.message,
+    original: error.original?.message
+  });
+}
 }
 
 async function removerCliente(req, res) {
@@ -47,15 +58,35 @@ async function buscarCliente(req, res) {
 }
 
 async function editarCliente(req, res) {
-  const { id } = req.params;
-  const { Nome, Telefone, Email } = req.body;
 
-  const atualizado = await db.clientesModel.update(
-    { Nome, Telefone, Email },
-    { where: { IdCliente: id } }
-  );
+  try {
 
-  return res.json(atualizado[0] > 0);
+    const { id } = req.params;
+
+    const atualizado = await db.clientesModel.update(
+      {
+        ...req.body,
+        DATAATUALIZACAO: new Date()
+      },
+      {
+        where: {
+          IDCLIENTE: id
+        }
+      }
+    );
+
+    return res.json({
+      atualizado: atualizado[0] > 0
+    });
+
+  } catch (e) {
+
+    console.error(e);
+
+    return res.status(500).json({
+      erro: e.message
+    });
+  }
 }
 
 module.exports = { buscarCliente, criarCliente, listarClientes, removerCliente, editarCliente };

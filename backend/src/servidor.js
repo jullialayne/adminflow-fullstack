@@ -10,8 +10,8 @@ servidor.use(cors()); // 👈 recomendo ativar
 
 servidor.use('/api', rotas);
 
-const porta = 1433;
+const porta = process.env.PORT || 3000;
 
-servidor.listen(process.env.PORT || porta, () => {
+servidor.listen(porta, () => {
   console.log(`Servidor rodando na porta ${porta}`);
 });

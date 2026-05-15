@@ -1,27 +1,34 @@
 module.exports = (sequelize, DataTypes) => {
-  const Clientes = sequelize.define('Clientes', {
-    IdCliente: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  return sequelize.define('Clientes', {
 
-    Nome: { type: DataTypes.STRING(150), allowNull: false },
-    Documento: { type: DataTypes.STRING(30) },
+    IDCLIENTE: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
 
-    Email: { type: DataTypes.STRING(150) },
-    Telefone: { type: DataTypes.STRING(30) },
+    NOME: {
+      type: DataTypes.STRING
+    },
 
-    Cidade: { type: DataTypes.STRING(100) },
-    Estado: { type: DataTypes.STRING(50) },
+    TELEFONE: {
+      type: DataTypes.STRING
+    },
 
-    DataCriacao: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
-    DataAtualizacao: { type: DataTypes.DATE }
+    EMAIL: {
+      type: DataTypes.STRING
+    },
 
-  }, { 
-    tableName: 'CLIENTES', 
-    timestamps: false 
+    DATACRIACAO: {
+      type: DataTypes.DATE
+    },
+
+    DATAATUALIZACAO: {
+      type: DataTypes.DATE
+    }
+
+  }, {
+    tableName: 'CLIENTES',
+    timestamps: false
   });
-
-  Clientes.associate = models => {
-    Clientes.hasMany(models.alugueisModel, { foreignKey: 'Cliente_Id' });
-  };
-
-  return Clientes;
 };

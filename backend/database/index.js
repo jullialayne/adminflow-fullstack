@@ -6,9 +6,11 @@ const sequelize = new Sequelize(
   process.env.DB_PASS,
   {
     host: process.env.DB_HOST,
-    port: 1433,
+    port: process.env.DB_PORT,
     dialect: 'mssql',
-    logging: false,
+
+    timezone: '-03:00',
+
     dialectOptions: {
       options: {
         encrypt: false,
@@ -18,9 +20,6 @@ const sequelize = new Sequelize(
   }
 );
 
-console.log("DB_HOST:", process.env.DB_HOST);
-console.log("DB_NAME:", process.env.DB_NAME);
-console.log("DB_USER:", process.env.DB_USER);
 const db = {};
 
 db.Sequelize = Sequelize;
