@@ -1,23 +1,60 @@
 module.exports = (sequelize, DataTypes) => {
   const Vestidos = sequelize.define('Vestidos', {
-    IdVestido: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    IdVestido: { 
+      type: DataTypes.INTEGER, 
+      primaryKey: true, 
+      autoIncrement: true,
+      field: 'IDVESTIDO'
+    },
 
-    Nome: { type: DataTypes.STRING(255), allowNull: false },
-    Tamanho: { type: DataTypes.STRING(10) },
-    Cor: { type: DataTypes.STRING(50) },
-    Tema: { type: DataTypes.STRING(100) },
+    Nome: { 
+      type: DataTypes.STRING(255), 
+      allowNull: false,
+      field: 'NOME'
+    },
+    
+    Tamanho: { 
+      type: DataTypes.STRING(10),
+      field: 'TAMANHO'
+    },
+    
+    Cor: { 
+      type: DataTypes.STRING(50),
+      field: 'COR'
+    },
+    
+    Tema: { 
+      type: DataTypes.STRING(100),
+      field: 'TEMA'
+    },
 
-    PrecoAluguel: { type: DataTypes.DECIMAL(10,2), allowNull: false },
+    PrecoAluguel: { 
+      type: DataTypes.DECIMAL(10,2), 
+      allowNull: false,
+      field: 'PRECO_ALUGUEL'
+    },
 
     Status: { 
       type: DataTypes.STRING(50), 
-      defaultValue: 'DISPONIVEL' 
+      defaultValue: 'DISPONIVEL',
+      field: 'STATUS'
     },
 
-    ImagemUrl: { type: DataTypes.TEXT },
+    ImagemUrl: { 
+      type: DataTypes.TEXT,
+      field: 'IMAGEM_URL'
+    },
 
-    DataCriacao: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
-    DataAtualizacao: { type: DataTypes.DATE }
+    DataCriacao: { 
+      type: DataTypes.DATE, 
+      defaultValue: DataTypes.NOW,
+      field: 'DATACRIACAO'
+    },
+    
+    DataAtualizacao: { 
+      type: DataTypes.DATE,
+      field: 'DATAATUALIZACAO'
+    }
 
   }, { 
     tableName: 'VESTIDOS', 

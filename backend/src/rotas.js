@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const autenticarToken = require('../middlewares/authMiddleware');
 
 /* =========================
    ROTAS DO SISTEMA NOVO
@@ -15,8 +16,8 @@ const alugueisRoutes = require("../routes/alugueisRoutes");
 ========================= */
 
 router.use('/usuarios', usuariosRoutes);
-router.use('/clientes', clientesRoutes);
-router.use('/vestidos', vestidosRoutes);
-router.use('/alugueis', alugueisRoutes);
+router.use('/clientes', autenticarToken, clientesRoutes);
+router.use('/vestidos', autenticarToken, vestidosRoutes);
+router.use('/alugueis', autenticarToken, alugueisRoutes);
 
 module.exports = router;

@@ -1,30 +1,36 @@
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define('Clientes', {
 
-    IDCLIENTE: {
+    IdCliente: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
+      field: 'IDCLIENTE'
     },
 
-    NOME: {
-      type: DataTypes.STRING
+    Nome: {
+      type: DataTypes.STRING,
+      field: 'NOME'
     },
 
-    TELEFONE: {
-      type: DataTypes.STRING
+    Telefone: {
+      type: DataTypes.STRING,
+      field: 'TELEFONE'
     },
 
-    EMAIL: {
-      type: DataTypes.STRING
+    Email: {
+      type: DataTypes.STRING,
+      field: 'EMAIL'
     },
 
-    DATACRIACAO: {
-      type: DataTypes.DATE
+    DataCriacao: {
+      type: DataTypes.DATE,
+      field: 'DATACRIACAO'
     },
 
-    DATAATUALIZACAO: {
-      type: DataTypes.DATE
+    DataAtualizacao: {
+      type: DataTypes.DATE,
+      field: 'DATAATUALIZACAO'
     }
 
   }, {
