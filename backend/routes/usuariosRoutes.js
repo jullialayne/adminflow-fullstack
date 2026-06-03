@@ -11,6 +11,6 @@ router.post('/', usuariosController.criarUsuario);
 router.get('/', autenticarToken, usuariosController.listarUsuarios);
 router.get('/:id', autenticarToken, usuariosController.buscarUsuario);
 router.put('/:id', autenticarToken, usuariosController.editarUsuario);
-router.delete('/:id', autenticarToken, usuariosController.removerUsuario);
+//router.delete('/:id', autenticarToken, usuariosController.removerUsuario);
 
 module.exports = router;

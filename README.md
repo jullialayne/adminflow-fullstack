@@ -1,164 +1,202 @@
 # AdminFlow
 
-## 👨‍💻 Sistema de gestão de aluguel de vestidos
+Sistema administrativo fullstack para gerenciamento de locação de vestidos.
 
-Sistema fullstack administrativo desenvolvido para portfólio, com foco em gestão de clientes, usuários e controle de aluguéis de vestidos.
-
----
-
-## 🚀 Sobre o projeto
-
-O **AdminFlow** é um sistema web que simula um ambiente administrativo real, permitindo o gerenciamento de clientes, usuários e aluguéis.
-
-O sistema possui validação de disponibilidade de vestidos por período, autenticação de usuários e arquitetura organizada em API REST.
-
----
-
-## 🧠 Tecnologias utilizadas
-
-### Frontend
-- React
-- Axios
-- React Router
+## 🚀 Tecnologias
 
 ### Backend
 - Node.js
 - Express
-- Sequelize (ORM)
-- JWT (autenticação)
-- bcrypt (criptografia de senha)
-
-### Banco de Dados
+- Sequelize
 - SQL Server
+- JWT
+- Bcrypt
 
----
+### Ferramentas
+- Postman
+- Git
+- GitHub
 
-## 📦 Estrutura do projeto
+## 📦 Estrutura do Projeto
 
-```bash
-/backend   → API REST (Node + Express)
-/frontend  → Interface React
+```text
+adminflow-fullstack/
+│
+├── backend/
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── database/
+│   ├── middlewares/
+│   └── src/
+│
+├── frontend/
+│
+└── docs/
+    └── postman/
 ```
-
----
-
-## 🧩 Entidades do sistema
-
-- 👤 Usuários  
-- 👥 Clientes  
-- 👗 Vestidos  
-- 📅 Aluguéis  
-
----
 
 ## 🔐 Funcionalidades
 
-### 👤 Usuários
-- Cadastro de usuários  
-- Login com senha criptografada (bcrypt)  
-- Autenticação de acesso  
+### Usuários
+- Cadastro de usuários
+- Login com JWT
+- Listagem de usuários
+- Edição de usuários
+- Remoção de usuários
 
-### 👥 Clientes
-- Cadastro de clientes  
-- Listagem  
-- Edição  
-- Remoção  
+### Clientes
+- Cadastro de clientes
+- Listagem de clientes
+- Busca por cliente
+- Edição de clientes
+- Remoção de clientes
 
-### 👗 Vestidos
-- Cadastro de vestidos  
-- Controle de tamanho, cor e tema  
-- Gestão de estoque  
+### Vestidos
+- Cadastro de vestidos
+- Listagem de vestidos
+- Busca por vestido
+- Edição de vestidos
+- Remoção de vestidos
+- Controle de disponibilidade
 
-### 📅 Aluguéis
-- Registro de aluguel de vestidos  
-- Controle de datas de retirada e devolução  
-- Validação de disponibilidade por período  
+### Aluguéis
+- Cadastro de contratos de aluguel
+- Validação de conflito de datas
+- Controle de reservas
+- Atualização de status
+- Cálculo de valor e multa
 
----
+## 🗄️ Banco de Dados
 
-## 🧠 Regra principal do sistema
+O projeto utiliza SQL Server com Sequelize ORM.
 
-Um vestido não pode ser alugado em períodos que já estejam ocupados.
+### Entidades
 
-O sistema valida conflitos de datas antes de permitir um novo aluguel.
+- Usuários
+- Clientes
+- Vestidos
+- Aluguéis
 
----
+## ⚙️ Configuração
 
-## 🏗️ Arquitetura do backend
+### Clone o projeto
 
-- controllers → regras HTTP (req/res)  
-- services → regras de negócio  
-- models → Sequelize  
-- routes → endpoints da API  
-- middlewares → validações e segurança  
-- database → conexão e inicialização do Sequelize  
-
----
-
-## 🔗 Endpoints principais da API
-
-```
-POST   /api/usuarios/login
-POST   /api/usuarios
-
-GET    /api/clientes
-POST   /api/clientes
-PUT    /api/clientes/:id
-DELETE /api/clientes/:id
-
-GET    /api/vestidos
-POST   /api/vestidos
-
-POST   /api/alugueis
-GET    /api/alugueis
+```bash
+git clone https://github.com/seu-usuario/adminflow-fullstack.git
 ```
 
----
-
-## 🚀 Como executar o projeto
-
-### Backend
+### Instale as dependências
 
 ```bash
 cd backend
 npm install
+```
+
+### Configure o arquivo .env
+
+```env
+DB_HOST=localhost
+DB_NAME=ADMINFLOW
+DB_USER=sa
+DB_PASS=sua_senha
+
+JWT_SECRET=secretKeyAdminFlowQuadrilha123
+```
+
+### Execute o servidor
+
+```bash
 npm run dev
 ```
 
-### Frontend
+Servidor disponível em:
 
-```bash
-cd frontend
-npm install
-npm start
+```text
+http://localhost:3000
 ```
 
----
+## 🧪 Testes da API
 
-## 🎯 Objetivo do projeto
+As collections do Postman estão disponíveis em:
 
-Este sistema foi desenvolvido para demonstrar habilidades em:
+```text
+docs/postman/
+```
 
-- Desenvolvimento fullstack (React + Node.js)
-- Criação de API REST
-- Modelagem de banco de dados relacional
-- Regras de negócio reais (controle de reservas)
-- Autenticação e segurança
-- Arquitetura escalável de software
+### Collections
 
----
+- usuarios.postman_collection.json
+- clientes.postman_collection.json
+- vestidos.postman_collection.json
+- alugueis.postman_collection.json
+
+### Environment
+
+- AdminFlow.postman_environment.json
+
+### Variáveis utilizadas
+
+```text
+baseUrl=http://localhost:3000/api
+token=
+```
+
+## 📌 Endpoints
+
+### Usuários
+
+```http
+POST   /api/usuarios
+POST   /api/usuarios/login
+GET    /api/usuarios
+GET    /api/usuarios/:id
+PUT    /api/usuarios/:id
+DELETE /api/usuarios/:id
+```
+
+### Clientes
+
+```http
+POST   /api/clientes
+GET    /api/clientes
+GET    /api/clientes/:id
+PUT    /api/clientes/:id
+DELETE /api/clientes/:id
+```
+
+### Vestidos
+
+```http
+POST   /api/vestidos
+GET    /api/vestidos
+GET    /api/vestidos/:id
+PUT    /api/vestidos/:id
+DELETE /api/vestidos/:id
+```
+
+### Aluguéis
+
+```http
+POST   /api/alugueis
+GET    /api/alugueis
+GET    /api/alugueis/:id
+PUT    /api/alugueis/:id
+DELETE /api/alugueis/:id
+```
+
+## 🔒 Autenticação
+
+As rotas protegidas utilizam JWT.
+
+Exemplo:
+
+```http
+Authorization: Bearer <token>
+```
+
+O token é obtido através da rota de login.
 
 ## 👨‍💻 Autor
 
-Projeto desenvolvido para fins de portfólio.
-
----
-
-## 💡 Melhorias futuras
-
-- Dashboard com métricas em tempo real  
-- Upload de imagens dos vestidos  
-- Sistema de permissões (admin / usuário)  
-- JWT completo com refresh token  
-- Deploy em produção  
-```
+Projeto desenvolvido para fins de estudo e portfólio.

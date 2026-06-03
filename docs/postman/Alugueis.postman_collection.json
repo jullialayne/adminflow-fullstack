@@ -1,0 +1,138 @@
+{
+  "info": {
+    "_postman_id": "fd3f55b3-69d8-4393-89ae-b240b305eee7",
+    "name": "Alugueis",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "15675164"
+  },
+  "item": [
+    {
+      "name": "Listar alugueis",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/alugueis",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "alugueis"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Buscar aluguel",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/alugueis/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "alugueis",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar aluguel",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"Cliente_Id\": 1,\r\n  \"Vestido_Id\": 2,\r\n  \"DataRetirada\": \"2026-04-20\",\r\n  \"DataDevolucao\": \"2026-04-25\",\r\n  \"Valor\": 250.00\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/alugueis",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "alugueis"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Editar aluguel",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"Cliente_Id\": 1,\r\n  \"Vestido_Id\": 2,\r\n  \"DataRetirada\": \"2026-04-20\",\r\n  \"DataDevolucao\": \"2026-04-25\",\r\n  \"Valor\": 250.00,\r\n  \"Multa\": 0,\r\n  \"Status\": \"RESERVADO\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/alugueis/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "alugueis",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

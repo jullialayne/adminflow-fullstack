@@ -1,0 +1,139 @@
+{
+  "info": {
+    "_postman_id": "6618b37e-ddf1-4561-8a58-21f99e2162ab",
+    "name": "Vestidos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "15675164"
+  },
+  "item": [
+    {
+      "name": "Listar vestidos",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/vestidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "vestidos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Buscar vestido",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/vestidos/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "vestidos",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar vestido",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"Nome\": \"Vestido Princesa Azul\",\r\n  \"Tamanho\": \"M\",\r\n  \"Cor\": \"Azul\",\r\n  \"Tema\": \"Princesa\",\r\n  \"PrecoAluguel\": 150.00,\r\n  \"ImagemUrl\": \"https://meusite.com/imagens/vestido-princesa.jpg\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/vestidos/",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "vestidos",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Editar vestido",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"Nome\": \"Vestido Princesa Rosa\",\r\n  \"Tamanho\": \"G\",\r\n  \"Cor\": \"Rosa\",\r\n  \"Tema\": \"Princesa\",\r\n  \"PrecoAluguel\": 180.00,\r\n  \"Status\": \"DISPONIVEL\",\r\n  \"ImagemUrl\": \"https://meusite.com/imagens/vestido-princesa-rosa.jpg\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/vestidos/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "vestidos",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
