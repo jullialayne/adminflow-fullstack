@@ -34,12 +34,8 @@ export default function Dashboard({ token, setTab }) {
   };
 
   useEffect(() => {
-    let isMounted = true;
-
-    async function fetchDashboardData() {
+    async function carregarDados() {
       try {
-        setLoading(true);
-
         const headers = {
           Authorization: `Bearer ${token}`
         };
@@ -49,251 +45,244 @@ export default function Dashboard({ token, setTab }) {
           fetch(`${API_URL}/alugueis`, { headers })
         ]);
 
-        if (!vestidosRes.ok) {
-          throw new Error(`Erro ao buscar vestidos: ${vestidosRes.status}`);
-        }
-
-        if (!alugueisRes.ok) {
-          throw new Error(`Erro ao buscar aluguéis: ${alugueisRes.status}`);
-        }
-
         const vestidos = await vestidosRes.json();
         const alugueis = await alugueisRes.json();
 
-        const vestidosArray = Array.isArray(vestidos) ? vestidos : [];
-        const alugueisArray = Array.isArray(alugueis) ? alugueis : [];
+        const vestidosArray = Array.isArray(vestidos)
+          ? vestidos
+          : [];
 
-        const totalDresses = vestidosArray.length;
+        const alugueisArray = Array.isArray(alugueis)
+          ? alugueis
+          : [];
 
-        const dressesInMaintenance = vestidosArray.filter(
-          (dress) => dress?.Status === 'MANUTENCAO'
-        ).length;
+        setMetrics({
+          totalDresses: vestidosArray.length,
+          activeRentals: alugueisArray.filter(
+            aluguel =>
+              aluguel.Status === 'RESERVADO' ||
+              aluguel.Status === 'RETIRADO'
+          ).length,
+          revenue: alugueisArray.reduce(
+            (acc, aluguel) =>
+              acc + Number(aluguel.Valor || 0),
+            0
+          ),
+          dressesInMaintenance: vestidosArray.filter(
+            vestido =>
+              vestido.Status === 'MANUTENCAO'
+          ).length
+        });
 
-        const activeRentals = alugueisArray.filter(
-          (rental) =>
-            rental?.Status === 'RESERVADO' ||
-            rental?.Status === 'RETIRADO'
-        ).length;
-
-        const revenue = alugueisArray.reduce(
-          (sum, rental) => sum + (Number(rental?.Valor) || 0),
-          0
+        setRecentRentals(
+          [...alugueisArray]
+            .sort(
+              (a, b) =>
+                b.IdAluguel - a.IdAluguel
+            )
+            .slice(0, 5)
         );
-
-        const recent = [...alugueisArray]
-          .sort(
-            (a, b) =>
-              Number(b?.IdAluguel || 0) -
-              Number(a?.IdAluguel || 0)
-          )
-          .slice(0, 5);
-
-        if (!isMounted) return;
-
-        setMetrics({
-          totalDresses,
-          activeRentals,
-          revenue,
-          dressesInMaintenance
-        });
-
-        setRecentRentals(recent);
       } catch (error) {
-        console.error('Erro ao carregar dashboard:', error);
-
-        if (!isMounted) return;
-
-        setMetrics({
-          totalDresses: 0,
-          activeRentals: 0,
-          revenue: 0,
-          dressesInMaintenance: 0
-        });
-
-        setRecentRentals([]);
+        console.error(error);
       } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+        setLoading(false);
       }
     }
 
-    if (token) {
-      fetchDashboardData();
-    } else {
-      setLoading(false);
-    }
-
-    return () => {
-      isMounted = false;
-    };
-  }, [token, API_URL]);
+    carregarDados();
+  }, [token]);
 
   if (loading) {
     return (
-      <div
-        style={{
-          padding: '40px',
-          textAlign: 'center',
-          color: 'var(--text-secondary)'
-        }}
-      >
-        Carregando dados do painel...
+      <div className="dashboard-loading">
+        Carregando painel...
       </div>
     );
   }
 
   return (
-    <div>
-      <div className="metrics-grid">
-        <div className="metric-card glass-panel">
-          <div className="metric-icon-box pink">👗</div>
-          <div className="metric-details">
-            <p>Total de Vestidos</p>
-            <div className="metric-value">
-              {metrics.totalDresses}
-            </div>
-          </div>
-        </div>
+    <div className="dashboard-container">
 
-        <div className="metric-card glass-panel">
-          <div className="metric-icon-box orange">📅</div>
-          <div className="metric-details">
-            <p>Aluguéis Ativos</p>
-            <div className="metric-value">
-              {metrics.activeRentals}
-            </div>
-          </div>
-        </div>
+      <div className="dashboard-header">
+        <h1>Bem-vinda ao Junine-se 👗</h1>
 
-        <div className="metric-card glass-panel">
-          <div className="metric-icon-box teal">💰</div>
-          <div className="metric-details">
-            <p>Faturamento Bruto</p>
-            <div className="metric-value">
-              {formatCurrency(metrics.revenue)}
-            </div>
-          </div>
-        </div>
-
-        <div className="metric-card glass-panel">
-          <div className="metric-icon-box gold">🛠️</div>
-          <div className="metric-details">
-            <p>Em Manutenção</p>
-            <div className="metric-value">
-              {metrics.dressesInMaintenance}
-            </div>
-          </div>
-        </div>
+        <p>
+          Gerencie vestidos, clientes e aluguéis
+          em um só lugar.
+        </p>
       </div>
 
-      <div className="table-panel glass-panel">
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '16px'
-          }}
-        >
-          <h2
-            style={{
-              fontSize: '20px',
-              fontWeight: '800'
-            }}
-          >
-            Aluguéis Recentes
-          </h2>
+      <div className="metrics-grid">
+
+        <div className="metric-card">
+          <div className="metric-icon-box pink">
+            👗
+          </div>
+
+          <div>
+            <span className="metric-label">
+              Vestidos
+            </span>
+
+            <h2 className="metric-value">
+              {metrics.totalDresses}
+            </h2>
+          </div>
+        </div>
+
+        <div className="metric-card">
+          <div className="metric-icon-box purple">
+            📅
+          </div>
+
+          <div>
+            <span className="metric-label">
+              Aluguéis Ativos
+            </span>
+
+            <h2 className="metric-value">
+              {metrics.activeRentals}
+            </h2>
+          </div>
+        </div>
+
+        <div className="metric-card">
+          <div className="metric-icon-box green">
+            💰
+          </div>
+
+          <div>
+            <span className="metric-label">
+              Faturamento
+            </span>
+
+            <h2 className="metric-value">
+              {formatCurrency(metrics.revenue)}
+            </h2>
+          </div>
+        </div>
+
+        <div className="metric-card">
+          <div className="metric-icon-box orange">
+            🛠️
+          </div>
+
+          <div>
+            <span className="metric-label">
+              Manutenção
+            </span>
+
+            <h2 className="metric-value">
+              {metrics.dressesInMaintenance}
+            </h2>
+          </div>
+        </div>
+
+      </div>
+
+     
+      <div className="table-panel">
+
+        <div className="section-title">
+
+          <div>
+            <h2>Aluguéis Recentes</h2>
+
+            <p>
+              Últimos contratos registrados
+            </p>
+          </div>
 
           <button
-            type="button"
             className="secondary-btn"
-            style={{
-              padding: '8px 16px',
-              fontSize: '12px'
-            }}
             onClick={() => setTab('alugueis')}
           >
-            Ver Todos
+            Ver todos
           </button>
+
         </div>
 
         {recentRentals.length === 0 ? (
-          <p
-            style={{
-              color: 'var(--text-muted)',
-              textAlign: 'center',
-              padding: '24px 0'
-            }}
-          >
-            Nenhum aluguel cadastrado ainda.
-          </p>
+          <div className="empty-state">
+            Nenhum aluguel cadastrado.
+          </div>
         ) : (
           <div className="table-responsive">
+
             <table className="styled-table">
+
               <thead>
                 <tr>
                   <th>Cliente</th>
                   <th>Vestido</th>
-                  <th>Data Retirada</th>
-                  <th>Data Devolução</th>
+                  <th>Retirada</th>
+                  <th>Devolução</th>
                   <th>Valor</th>
                   <th>Status</th>
                 </tr>
               </thead>
 
               <tbody>
-                {recentRentals.map((rental) => (
+
+                {recentRentals.map(rental => (
                   <tr key={rental.IdAluguel}>
+
                     <td className="client-name-cell">
-                      <div className="client-initial-avatar">
-                        {(rental?.Cliente?.Nome || 'C')
-                          .charAt(0)
-                          .toUpperCase()}
-                      </div>
+
+                     
 
                       {rental?.Cliente?.Nome ||
-                        'Cliente não encontrado'}
+                        'Cliente'}
+
                     </td>
 
                     <td>
                       {rental?.Vestido?.Nome ||
-                        'Vestido não encontrado'}
+                        'Vestido'}
                     </td>
 
                     <td>
-                      {formatDate(rental?.DataRetirada)}
+                      {formatDate(
+                        rental.DataRetirada
+                      )}
                     </td>
 
                     <td>
-                      {formatDate(rental?.DataDevolucao)}
+                      {formatDate(
+                        rental.DataDevolucao
+                      )}
                     </td>
 
-                    <td
-                      style={{
-                        fontWeight: '700',
-                        color: 'var(--color-secondary)'
-                      }}
-                    >
-                      {formatCurrency(rental?.Valor)}
+                    <td className="valor-cell">
+                      {formatCurrency(
+                        rental.Valor
+                      )}
                     </td>
 
                     <td>
+
                       <span
-                        className={`badge-status ${
-                          rental?.Status?.toLowerCase() || ''
+                        className={`status-pill ${
+                          rental?.Status?.toLowerCase()
                         }`}
                       >
-                        {rental?.Status || '-'}
+                        {rental.Status}
                       </span>
+
                     </td>
+
                   </tr>
                 ))}
+
               </tbody>
+
             </table>
+
           </div>
         )}
+
       </div>
+
     </div>
   );
 }
