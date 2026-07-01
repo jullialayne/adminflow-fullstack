@@ -23,6 +23,12 @@ module.exports = (sequelize, DataTypes) => {
       field: 'EMAIL'
     },
 
+    Ativo: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
+    },
+
     DataCriacao: {
       type: DataTypes.DATE,
       field: 'DATACRIACAO'

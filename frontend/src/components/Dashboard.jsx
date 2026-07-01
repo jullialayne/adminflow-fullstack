@@ -112,74 +112,69 @@ export default function Dashboard({ token, setTab }) {
         </p>
       </div>
 
-      <div className="metrics-grid">
+     <div className="metrics-grid">
 
-        <div className="metric-card">
-          <div className="metric-icon-box pink">
-            👗
-          </div>
+  <div className="metric-card">
+    <div className="metric-top">
+      <span className="metric-icon">👗</span>
+      <span className="metric-title">Vestidos</span>
+    </div>
 
-          <div>
-            <span className="metric-label">
-              Vestidos
-            </span>
+    <h2 className="metric-number">
+      {metrics.totalDresses}
+    </h2>
 
-            <h2 className="metric-value">
-              {metrics.totalDresses}
-            </h2>
-          </div>
-        </div>
+    <p className="metric-description">
+      cadastrados no sistema
+    </p>
+  </div>
 
-        <div className="metric-card">
-          <div className="metric-icon-box purple">
-            📅
-          </div>
+  <div className="metric-card">
+    <div className="metric-top">
+      <span className="metric-icon">📅</span>
+      <span className="metric-title">Aluguéis Ativos</span>
+    </div>
 
-          <div>
-            <span className="metric-label">
-              Aluguéis Ativos
-            </span>
+    <h2 className="metric-number">
+      {metrics.activeRentals}
+    </h2>
 
-            <h2 className="metric-value">
-              {metrics.activeRentals}
-            </h2>
-          </div>
-        </div>
+    <p className="metric-description">
+      reservas em andamento
+    </p>
+  </div>
 
-        <div className="metric-card">
-          <div className="metric-icon-box green">
-            💰
-          </div>
+  <div className="metric-card">
+    <div className="metric-top">
+      <span className="metric-icon">💰</span>
+      <span className="metric-title">Faturamento</span>
+    </div>
 
-          <div>
-            <span className="metric-label">
-              Faturamento
-            </span>
+    <h2 className="metric-number">
+      {formatCurrency(metrics.revenue)}
+    </h2>
 
-            <h2 className="metric-value">
-              {formatCurrency(metrics.revenue)}
-            </h2>
-          </div>
-        </div>
+    <p className="metric-description">
+      valor total dos contratos
+    </p>
+  </div>
 
-        <div className="metric-card">
-          <div className="metric-icon-box orange">
-            🛠️
-          </div>
+  <div className="metric-card">
+    <div className="metric-top">
+      <span className="metric-icon">🛠️</span>
+      <span className="metric-title">Manutenção</span>
+    </div>
 
-          <div>
-            <span className="metric-label">
-              Manutenção
-            </span>
+    <h2 className="metric-number">
+      {metrics.dressesInMaintenance}
+    </h2>
 
-            <h2 className="metric-value">
-              {metrics.dressesInMaintenance}
-            </h2>
-          </div>
-        </div>
+    <p className="metric-description">
+      vestidos indisponíveis
+    </p>
+  </div>
 
-      </div>
-
+</div>
      
       <div className="table-panel">
 

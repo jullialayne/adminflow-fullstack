@@ -4,6 +4,7 @@ import ClienteModal from './ClienteModal';
 export default function Clientes({ token }) {
   const [clientes, setClientes] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [clienteSelecionado, setClienteSelecionado] = useState(null);
 
   async function carregarClientes() {
     const res = await fetch(
@@ -19,6 +20,23 @@ export default function Clientes({ token }) {
     setClientes(data);
   }
 
+  async function desativarCliente(id) {
+    const confirmar = window.confirm(
+      "Deseja realmente desativar este cliente?"
+    );
+
+    if (!confirmar) return;
+
+    await fetch(`http://localhost:3000/api/clientes/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    carregarClientes();
+  }
+
   useEffect(() => {
     carregarClientes();
   }, []);
@@ -31,7 +49,10 @@ export default function Clientes({ token }) {
 
         <button
           className="primary-btn"
-          onClick={() => setShowModal(true)}
+          onClick={() => {
+            setClienteSelecionado(null);
+            setShowModal(true);
+          }}
         >
           + Novo Cliente
         </button>
@@ -55,11 +76,20 @@ export default function Clientes({ token }) {
               <td>{cliente.Email}</td>
 
               <td>
-                <button className="edit-btn">
-                  ✏️
-                </button>
-
-                <button className="delete-btn">
+                <button
+                  className="edit-btn"
+                  onClick={() => {
+                    setClienteSelecionado(cliente);
+                    setShowModal(true);
+                  }}
+                >
+                ✏️
+              </button>
+              <button
+                className="delete-btn"
+                onClick={() => desativarCliente(cliente.IdCliente)}
+                title="Desativar cliente"
+              >
                   🗑️
                 </button>
               </td>
@@ -71,9 +101,14 @@ export default function Clientes({ token }) {
       {showModal && (
         <ClienteModal
           token={token}
-          onClose={() => setShowModal(false)}
+          cliente={clienteSelecionado}
+          onClose={() => {
+            setClienteSelecionado(null);
+            setShowModal(false);
+          }}
           onSuccess={() => {
             carregarClientes();
+            setClienteSelecionado(null);
             setShowModal(false);
           }}
         />
